@@ -31,22 +31,7 @@
     const isAlt1 = typeof window.alt1 !== "undefined" || typeof identifyApp !== "undefined";
     logBox.innerHTML += `<br>${isAlt1 ? '✅ Alt1 environment detected' : '❌ Alt1 environment NOT found'}`;
 
-    function fallbackAlt1() {
-      return {
-        ChatboxListener: function () {
-          this.find = () => {
-            logBox.innerHTML += "<br>🧪 Fake chatbox detected.";
-            return true;
-          };
-          this.registerCallback = (cb) => {
-            logBox.innerHTML += "<br>🧪 Simulating drop message.";
-            setTimeout(() => cb({ text: "You receive: 3 x Grapes" }), 1500);
-          };
-        }
-      };
-    }
-
-    const ChatboxListener = window.ChatboxListener || fallbackAlt1().ChatboxListener;
+    const ChatboxListener = window.ChatboxListener;
 
     document.addEventListener("DOMContentLoaded", function () {
       try {
@@ -89,4 +74,5 @@
   </script>
 </body>
 </html>
+
 
