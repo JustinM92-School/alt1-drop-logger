@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Alt1 Drop Logger</title>
+  <script src="https://cdn.jsdelivr.net/npm/alt1/alt1.js"></script>
+  <style>
+    body {
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-family: sans-serif;
+      padding: 10px;
+    }
+    #log {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid white;
+      padding: 5px;
+    }
+    .entry {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h2>RuneScape Drop Logger</h2>
+  <div id="log"></div>
+  <script>
+    if (!window.alt1) {
+      alert("Alt1 not detected. Please open this page in the Alt1 client.");
+    }
+
+    // Wait for Alt1 to initialize
+    window.addEventListener("load", function () {
+      alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
+
+      const logBox = document.getElementById("log");
+      const chat = new ChatboxListener();
+      chat.find();
+
+      chat.registerCallback((data) => {
+        if (!data || !data.text) return;
+
+        // Basic detection for drop messages
+        if (data.text.includes("You receive:")) {
+          const entry = document.createElement("div");
+          entry.className = "entry";
+          entry.textContent = data.text;
+          logBox.appendChild(entry);
+          logBox.scrollTop = logBox.scrollHeight;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
