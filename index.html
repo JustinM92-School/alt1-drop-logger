@@ -30,21 +30,21 @@
     const logBox = document.getElementById("log");
     logBox.innerHTML = "🟡 JavaScript running...";
 
-    const isAlt1 = typeof window.alt1 !== "undefined" || typeof identifyApp !== "undefined";
+    const isAlt1 = typeof window.alt1 !== "undefined";
     logBox.innerHTML += `<br>${isAlt1 ? '✅ Alt1 environment detected' : '❌ Alt1 environment NOT found'}`;
 
     const ChatboxListener = window.ChatboxListener;
 
     document.addEventListener("DOMContentLoaded", function () {
       try {
-        if (typeof identifyApp !== "undefined") {
-          identifyApp("drop-logger", "Drop Logger", [800, 600]);
-          logBox.innerHTML += "<br>📛 identifyApp() called successfully.";
+        if (window.alt1 && typeof window.alt1.identifyApp === "function") {
+          window.alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
+          logBox.innerHTML += "<br>📛 alt1.identifyApp() called successfully.";
         } else {
-          logBox.innerHTML += "<br>⚠️ identifyApp() is not available.";
+          logBox.innerHTML += "<br>⚠️ alt1.identifyApp() is not available.";
         }
       } catch (e) {
-        logBox.innerHTML += `<br style='color:red;'>❌ identifyApp() failed: ${e.message}`;
+        logBox.innerHTML += `<br style='color:red;'>❌ alt1.identifyApp() failed: ${e.message}`;
       }
 
       logBox.innerHTML += "<br>🔍 Looking for chatbox...";
@@ -76,5 +76,4 @@
   </script>
 </body>
 </html>
-
 
