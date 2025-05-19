@@ -25,35 +25,41 @@
 </head>
 <body>
   <h2>RuneScape Drop Logger</h2>
-  <div id="log"></div>
+  <div id="log">Initializing...</div>
   <script>
     if (!window.alt1) {
       alert("Alt1 not detected. Please open this page in the Alt1 client.");
     }
 
-    // Wait for Alt1 to initialize
     window.addEventListener("load", function () {
       alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
 
       const logBox = document.getElementById("log");
-      const chat = new ChatboxListener();
-      if (!chat.find()) {
-        logBox.innerHTML = "<em>Could not find the RuneScape chatbox. Make sure it's visible and not resized.</em>";
-        return;
-      }
+      logBox.innerHTML = "Looking for chatbox...";
 
-      chat.registerCallback((data) => {
-        if (!data || !data.text) return;
+      setTimeout(() => {
+        const chat = new ChatboxListener();
+        const found = chat.find();
 
-        // Basic detection for drop messages
-        if (data.text.includes("You receive:")) {
-          const entry = document.createElement("div");
-          entry.className = "entry";
-          entry.textContent = data.text;
-          logBox.appendChild(entry);
-          logBox.scrollTop = logBox.scrollHeight;
+        if (!found) {
+          logBox.innerHTML = "<em>❌ Chatbox not found. Make sure it's in the default position and not resized. Try restarting the logger.</em>";
+          return;
         }
-      });
+
+        logBox.innerHTML = "✅ Chatbox found. Listening for drops...";
+
+        chat.registerCallback((data) => {
+          if (!data || !data.text) return;
+
+          if (data.text.includes("You receive:")) {
+            const entry = document.createElement("div");
+            entry.className = "entry";
+            entry.textContent = data.text;
+            logBox.appendChild(entry);
+            logBox.scrollTop = logBox.scrollHeight;
+          }
+        });
+      }, 1000); // short delay to let Alt1 init fully
     });
   </script>
 </body>
