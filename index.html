@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Alt1 Drop Logger</title>
-  <script src="https://cdn.jsdelivr.net/npm/alt1/alt1.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alt1/chatbox.js"></script>
   <style>
     body {
       background: rgba(0, 0, 0, 0.6);
@@ -27,26 +25,43 @@
   <h2>RuneScape Drop Logger</h2>
   <div id="log">Initializing...</div>
   <script>
-    if (!window.alt1) {
-      alert("Alt1 not detected. Please open this page in the Alt1 client.");
+    const logBox = document.getElementById("log");
+    logBox.innerHTML = "🟡 JavaScript running...";
+
+    function fakeAlt1Fallback() {
+      return {
+        identifyApp: () => logBox.innerHTML += "<br>🧪 Alt1 fallback active",
+        ChatboxListener: function () {
+          this.find = () => {
+            logBox.innerHTML += "<br>🧪 Fake chatbox detected.";
+            return true;
+          };
+          this.registerCallback = (cb) => {
+            logBox.innerHTML += "<br>🧪 Simulating drop message.";
+            setTimeout(() => cb({ text: "You receive: 3 x Grapes" }), 1500);
+          };
+        }
+      };
     }
+
+    const alt1 = window.alt1 || fakeAlt1Fallback();
+    const ChatboxListener = window.ChatboxListener || alt1.ChatboxListener;
 
     document.addEventListener("DOMContentLoaded", function () {
       alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
 
-      const logBox = document.getElementById("log");
-      logBox.innerHTML = "Looking for chatbox...";
+      logBox.innerHTML += "<br>🔍 Looking for chatbox...";
 
       setTimeout(() => {
         const chat = new ChatboxListener();
         const found = chat.find();
 
         if (!found) {
-          logBox.innerHTML = "<em>❌ Chatbox not found. Make sure it's in the default position and not resized. Try restarting the logger.</em>";
+          logBox.innerHTML += "<br>❌ Chatbox not found.";
           return;
         }
 
-        logBox.innerHTML = "✅ Chatbox found. Listening for drops...";
+        logBox.innerHTML += "<br>✅ Chatbox found. Listening...";
 
         chat.registerCallback((data) => {
           if (!data || !data.text) return;
