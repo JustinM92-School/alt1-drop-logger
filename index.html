@@ -28,7 +28,10 @@
     const logBox = document.getElementById("log");
     logBox.innerHTML = "🟡 JavaScript running...";
 
-    function fakeAlt1Fallback() {
+    const isAlt1 = typeof window.alt1 !== "undefined" && window.alt1;
+    logBox.innerHTML += `<br>${isAlt1 ? '✅ window.alt1 detected' : '❌ window.alt1 NOT found'}`;
+
+    function fallbackAlt1() {
       return {
         identifyApp: () => logBox.innerHTML += "<br>🧪 Alt1 fallback active",
         ChatboxListener: function () {
@@ -44,13 +47,16 @@
       };
     }
 
-    const alt1 = window.alt1 || fakeAlt1Fallback();
+    const alt1 = isAlt1 ? window.alt1 : fallbackAlt1();
     const ChatboxListener = window.ChatboxListener || alt1.ChatboxListener;
 
     document.addEventListener("DOMContentLoaded", function () {
-      alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
-
-      logBox.innerHTML += "<br>🔍 Looking for chatbox...";
+      try {
+        alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
+        logBox.innerHTML += "<br>🔍 Looking for chatbox...";
+      } catch (e) {
+        logBox.innerHTML += `<br style='color:red;'>❌ alt1.identifyApp() failed: ${e.message}`;
+      }
 
       setTimeout(() => {
         const chat = new ChatboxListener();
