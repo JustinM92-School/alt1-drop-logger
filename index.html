@@ -31,7 +31,7 @@
       alert("Alt1 not detected. Please open this page in the Alt1 client.");
     }
 
-    window.addEventListener("load", function () {
+    document.addEventListener("DOMContentLoaded", function () {
       alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
 
       const logBox = document.getElementById("log");
@@ -59,7 +59,7 @@
             logBox.scrollTop = logBox.scrollHeight;
           }
         });
-      }, 1000); // short delay to let Alt1 init fully
+      }, 1000);
     });
   </script>
 </body>
