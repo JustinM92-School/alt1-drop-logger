@@ -38,9 +38,15 @@
     document.addEventListener("DOMContentLoaded", function () {
       try {
         if (window.alt1 && typeof window.alt1.identifyApp === "function") {
-          window.alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
-          logBox.innerHTML += "<br>📛 alt1.identifyApp() called successfully.";
-        } else {
+  window.alt1.identifyApp({
+    name: "Drop Logger",
+    description: "Logs drop messages from RuneScape chatbox.",
+    icon: "", // Optional icon URL
+    version: "1.0",
+    uuid: "alt1-drop-logger-v1",
+  });
+  logBox.innerHTML += "<br>📛 alt1.identifyApp() called successfully.";
+}} else {
           logBox.innerHTML += "<br>⚠️ alt1.identifyApp() is not available.";
         }
       } catch (e) {
