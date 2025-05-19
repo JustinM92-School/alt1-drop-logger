@@ -26,6 +26,7 @@
 <body>
   <h2>RuneScape Drop Logger</h2>
   <div id="log">Initializing...</div>
+
   <script>
     const logBox = document.getElementById("log");
     logBox.innerHTML = "🟡 JavaScript running...";
@@ -35,9 +36,18 @@
 
     const ChatboxListener = window.ChatboxListener;
 
-   
-  logBox.innerHTML += "<br>📛 alt1.identifyApp() called successfully.";
-} else {
+    document.addEventListener("DOMContentLoaded", function () {
+      try {
+        if (window.alt1 && typeof window.alt1.identifyApp === "function") {
+          window.alt1.identifyApp({
+            name: "Drop Logger",
+            description: "Logs drop messages from RuneScape chatbox.",
+            icon: "", // Optional icon URL
+            version: "1.0",
+            uuid: "alt1-drop-logger-v1",
+          });
+          logBox.innerHTML += "<br>📛 alt1.identifyApp() called successfully.";
+        } else {
           logBox.innerHTML += "<br>⚠️ alt1.identifyApp() is not available.";
         }
       } catch (e) {
