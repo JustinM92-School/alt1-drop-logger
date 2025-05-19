@@ -1,0 +1,12 @@
+{
+  "appname": "Drop Logger",
+  "appdesc": "Logs drop messages from RuneScape chatbox.",
+  "icon": "", 
+  "version": "1.0",
+  "uuid": "alt1-drop-logger-v1",
+  "url": "https://<your-username>.github.io/<your-repo>/",
+  "defaultwidth": 400,
+  "defaultheight": 500,
+  "img": "",
+  "custom": true
+}
