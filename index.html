@@ -42,7 +42,7 @@
         if (!data || !data.text) return;
 
         // Basic detection for drop messages
-        if (data.text.includes("You receive: ")) {
+        if (data.text.includes("You received: ")) {
           const entry = document.createElement("div");
           entry.className = "entry";
           entry.textContent = data.text;
