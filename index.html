@@ -28,12 +28,11 @@
     const logBox = document.getElementById("log");
     logBox.innerHTML = "🟡 JavaScript running...";
 
-    const isAlt1 = typeof window.alt1 !== "undefined" && window.alt1;
-    logBox.innerHTML += `<br>${isAlt1 ? '✅ window.alt1 detected' : '❌ window.alt1 NOT found'}`;
+    const isAlt1 = typeof window.alt1 !== "undefined" || typeof identifyApp !== "undefined";
+    logBox.innerHTML += `<br>${isAlt1 ? '✅ Alt1 environment detected' : '❌ Alt1 environment NOT found'}`;
 
     function fallbackAlt1() {
       return {
-        identifyApp: () => logBox.innerHTML += "<br>🧪 Alt1 fallback active",
         ChatboxListener: function () {
           this.find = () => {
             logBox.innerHTML += "<br>🧪 Fake chatbox detected.";
@@ -47,16 +46,21 @@
       };
     }
 
-    const alt1 = isAlt1 ? window.alt1 : fallbackAlt1();
-    const ChatboxListener = window.ChatboxListener || alt1.ChatboxListener;
+    const ChatboxListener = window.ChatboxListener || fallbackAlt1().ChatboxListener;
 
     document.addEventListener("DOMContentLoaded", function () {
       try {
-        alt1.identifyApp("drop-logger", "Drop Logger", [800, 600]);
-        logBox.innerHTML += "<br>🔍 Looking for chatbox...";
+        if (typeof identifyApp !== "undefined") {
+          identifyApp("drop-logger", "Drop Logger", [800, 600]);
+          logBox.innerHTML += "<br>📛 identifyApp() called successfully.";
+        } else {
+          logBox.innerHTML += "<br>⚠️ identifyApp() is not available.";
+        }
       } catch (e) {
-        logBox.innerHTML += `<br style='color:red;'>❌ alt1.identifyApp() failed: ${e.message}`;
+        logBox.innerHTML += `<br style='color:red;'>❌ identifyApp() failed: ${e.message}`;
       }
+
+      logBox.innerHTML += "<br>🔍 Looking for chatbox...";
 
       setTimeout(() => {
         const chat = new ChatboxListener();
